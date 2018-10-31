@@ -1,8 +1,14 @@
 protobuf-net for Unity 5的工具包。
 
-最新的protobuf-net代码使用了很多C#的新语法和特性，但是这些特性在Unity 5上都没法使用，需要做特定的修改才行。而官方提供的protobuf for unity的dll，在启用
-il2cpp的时候，会因为使用了反射特性而运行失败，需要做一些修改才行。
+最新的protobuf-net代码使用了很多C#的新语法和特性，但是这些特性在Unity 5上都没法使用，需要做特定的修改才行，需要修改的位置有点多。
+另外，而官方提供的比较老的protobuf for unity的dll，在启用il2cpp的时候，会因为使用了反射特性而运行失败，需要做一些修改才行。
 
-本工程就是基于老版本的protobuf-net做的对应的修改。可以直接拿来放到你的Unity 5工程里面。
+该项目的原始来源在：https://code.google.com/archive/p/protobuf-net/
 
-如果使用的是Unity 2017之后的版本，直接使用官方protobuf网站上的csharp库就行了。
+本工程是基于上面版本的protobuf-net做的对应的修改，可以在Android和IOS上启用il2cpp的情况下正确运行。
+
+其中，ProtoBuf目录下包含Protobuf-Net的源代码，可以直接放在Unity5工程的ThirdParty目录或者Plugins目录下面使用。ProtoTools目录下包含根据proto源文件生成c#协议代码的工具，通常会放在独立于游戏客户端和服务器端的一个目录下，其中ProtoGen是官方提供的编译好的协议生成工具，ProtoSource放项目自己的协议文件，示例中的build_proto.bat会把生成的cs文件也放在ProtoSource目录下，实际使用时可以适当修改这个批处理文件，比如，生成cs文件之后，分别拷贝一份到客户端和服务器的指定目录，保证两端使用的协议统一。
+
+另外，也可以直接把ProtoDll目录下的protobuf-net.dll文件放到项目的Plugins目录下使用，这样就不需要ProtoBuf目录的内容了。根据Unity的官方文档，在项目启动il2cpp的情况下，会自动把导入的托管dll中的符号剥除（strip），所以会无法使用反射特性。例如，如果使用到了Protobuf消息的typeof(X).Name，就会报方法找不到的错误，这是，需要在项目的Assets目录下放置link.xml文件，其中指定某个dll的剥除级别。如本项目的link.xml的内容，表示不对protobuf-net.dll库执行符号剥离。
+
+确实有点啰嗦。如果你项目使用的是Unity 2017之后的版本，直接使用官方protobuf网站上的csharp库就行了，也不用搞这些复杂的事情。
