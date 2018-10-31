@@ -1,0 +1,10 @@
+
+
+message request {
+      optional string  username = 1;
+      optional string  password = 2;
+}
+
+message response {
+      optional uint32 user_id = 1;
+}
